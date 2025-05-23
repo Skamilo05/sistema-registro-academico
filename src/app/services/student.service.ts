@@ -75,10 +75,10 @@ getClassmates(subjectId: number): Observable<Classmate[]> {
     return this.http.get<AvailableSubject[]>(`${this.apiUrl}/Estudiantes/${studentId}/materias-disponibles`);
   }
 
-  enrollSubjects(studentId: number, subjectIds: number[]): Observable<any> {
+  enrollSubjects(studentId: number, subjectIds: number): Observable<any> {
     return this.http.post(`${this.apiUrl}/Estudiantes/inscribir`, {
       estudianteId: studentId,
-      materiaId: subjectIds[0],
+      materiaId: subjectIds,
     })
   }
 }

@@ -12,6 +12,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { Router } from "@angular/router";
 import { AuthService } from "../../services/auth.service";
 import { StudentService, AvailableSubject } from "../../services/student.service";
+import { Subject } from "rxjs";
 
 @Component({
   selector: "app-subject-selection",
@@ -275,23 +276,26 @@ export class SubjectSelectionComponent implements OnInit {
     }
 
     this.isSaving = true;
-    this.studentService.enrollSubjects(studentId, this.selectedSubjects).subscribe({
+    this.selectedSubjects.forEach(sub=>{
+      this.studentService.enrollSubjects(studentId, sub).subscribe({
       next: () => {
         this.isSaving = false;
         this.snackBar.open("Materias inscritas correctamente.", "Cerrar", {
           duration: 5000,
         });
-        this.router.navigate(["/dashboard"]);
       },
       error: (error) => {
         this.isSaving = false;
-        
         this.mensaje = error.error.error.length > 0? error.error.error: "Error al inscribir materias. Intente nuevamente."
         this.snackBar.open( this.mensaje ,"Cerrar", {
           duration: 5000,
         });
         console.error("Error enrolling subjects:", error);
+        return
+
       },
     });
+    })
+        this.router.navigate(["/dashboard"]);
   }
 }
